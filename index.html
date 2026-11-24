@@ -1,3 +1,1526 @@
+          <!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XUMTECH | Diagnóstico Comercial y Estrategia ABM</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para visualizaciones interactivas con etiquetas de datos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            teal: '#139A91',
+                            tealLight: '#1CC4B9',
+                            tealDark: '#0D6E68',
+                            coral: '#E63222',
+                            coralDark: '#B82316',
+                            obsidian: '#0B0F13',
+                            surface: '#121820',
+                            card: '#18202B',
+                            border: '#263242',
+                            muted: '#8E9BAE'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos base y scrollbar corporativo */
+        body {
+            background-color: #0B0F13;
+            color: #F1F5F9;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #263242;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #139A91;
+        }
+
+        /* Estilos para impresión / exportación a PDF */
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #0F172A !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .bg-brand-obsidian, .bg-brand-surface, .bg-brand-card {
+                background-color: #FFFFFF !important;
+                color: #0F172A !important;
+                border-color: #CBD5E1 !important;
+            }
+            .text-white, .text-slate-100, .text-slate-200, .text-slate-300 {
+                color: #0F172A !important;
+            }
+            .text-brand-muted, .text-slate-400 {
+                color: #475569 !important;
+            }
+            section {
+                page-break-inside: avoid;
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+            canvas {
+                max-height: 260px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-brand-obsidian text-slate-100 selection:bg-brand-teal selection:text-white">
+
+    <!-- NAVEGACIÓN SUPERIOR FIJA -->
+    <header class="sticky top-0 z-50 bg-brand-obsidian/95 backdrop-blur-md border-b border-brand-border no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Identidad -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-brand-teal/15 border border-brand-teal/40 flex items-center justify-center">
+                        <div class="w-3.5 h-3.5 bg-brand-teal rounded-xs"></div>
+                    </div>
+                    <div>
+                        <span class="font-bold tracking-wider text-white text-sm sm:text-base">XUMTECH</span>
+                        <span class="hidden sm:inline-block text-xs text-brand-muted ml-2 border-l border-brand-border pl-2">Inteligencia Comercial & ABM</span>
+                    </div>
+                </div>
+
+                <!-- Enlaces de navegación Desktop -->
+                <nav class="hidden lg:flex items-center space-x-1 text-xs font-medium" id="desktop-nav">
+                    <a href="#resumen" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">1. Resumen</a>
+                    <a href="#evidencia" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">2. 38 Reuniones</a>
+                    <a href="#bbdd" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">3. BBDD (6.102)</a>
+                    <a href="#estrategia" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">4. Priorización</a>
+                    <a href="#metodologia" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">5. Metodología ABM</a>
+                    <a href="#conclusion" class="nav-link px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-brand-card transition-colors">6. Conclusión</a>
+                </nav>
+
+                <!-- Acción Exportar PDF -->
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-brand-teal hover:bg-brand-tealLight text-brand-obsidian transition-colors cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <span>Exportar PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Sub-navegación móvil horizontal -->
+        <div class="lg:hidden border-t border-brand-border/60 bg-brand-surface overflow-x-auto">
+            <div class="flex items-center px-4 py-2 space-x-2 text-xs whitespace-nowrap">
+                <a href="#resumen" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">1. Resumen</a>
+                <a href="#evidencia" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">2. 38 Reuniones</a>
+                <a href="#bbdd" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">3. BBDD</a>
+                <a href="#estrategia" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">4. Priorización</a>
+                <a href="#metodologia" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">5. Metodología ABM</a>
+                <a href="#conclusion" class="px-2.5 py-1 rounded bg-brand-card text-slate-200">6. Conclusión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 1: PORTADA Y RESUMEN EJECUTIVO                                -->
+        <!-- ===================================================================== -->
+        <section id="resumen" class="pt-10 sm:pt-14 pb-12 border-b border-brand-border">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-teal/10 border border-brand-teal/30 text-brand-tealLight text-xs font-semibold tracking-wide uppercase mb-4">
+                        Diagnóstico Ejecutivo & Plan Estratégico
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                        XUMTECH <span class="text-brand-teal font-light">|</span> Diagnóstico Comercial y Estrategia ABM
+                    </h1>
+                    <p class="mt-3 text-lg sm:text-xl text-slate-300 font-normal">
+                        De la generación de contactos al desarrollo estratégico de cuentas.
+                    </p>
+                </div>
+                <div class="text-xs text-brand-muted lg:text-right">
+                    <p class="font-medium text-slate-300">Documento de Dirección Comercial</p>
+                    <p>Base analizada: 6.102 contactos · 38 reuniones</p>
+                </div>
+            </div>
+
+            <!-- 5 KPIs Principales -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+                <div class="bg-brand-card border border-brand-border rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-brand-teal"></div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium text-brand-muted uppercase tracking-wider">Tracción Validada</p>
+                        <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <p class="text-3xl font-extrabold text-white mt-2">38</p>
+                    <p class="text-xs text-slate-300 mt-1">Reuniones comerciales</p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-500"></div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium text-brand-muted uppercase tracking-wider">Universo Actual</p>
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <p class="text-3xl font-extrabold text-white mt-2">6.102</p>
+                    <p class="text-xs text-slate-300 mt-1">Contactos en la BBDD</p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-brand-teal"></div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium text-brand-muted uppercase tracking-wider">Alineación Geográfica</p>
+                        <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <p class="text-3xl font-extrabold text-brand-tealLight mt-2">94,7%</p>
+                    <p class="text-xs text-slate-300 mt-1">De reuniones en países del ICP</p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-brand-teal"></div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium text-brand-muted uppercase tracking-wider">Alineación Funcional</p>
+                        <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <p class="text-3xl font-extrabold text-brand-tealLight mt-2">89,5%</p>
+                    <p class="text-xs text-slate-300 mt-1">De reuniones en áreas funcionales del ICP</p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-brand-coral"></div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium text-brand-muted uppercase tracking-wider">Cobertura Regional</p>
+                        <svg class="w-4 h-4 text-brand-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <p class="text-3xl font-extrabold text-white mt-2">7 de 9</p>
+                    <p class="text-xs text-slate-300 mt-1">Países objetivo generaron reuniones</p>
+                </div>
+            </div>
+
+            <!-- Síntesis Ejecutiva -->
+            <div class="bg-brand-surface border border-brand-border rounded-2xl p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-teal"></span>
+                    <h2 class="text-base sm:text-lg font-bold text-white uppercase tracking-wide">Síntesis Ejecutiva</h2>
+                </div>
+                <div class="space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed">
+                    <p>
+                        XUMTECH cuenta con una base de datos bien alineada con su ICP y resultados comerciales concentrados en mercados, industrias y áreas funcionales identificables.
+                    </p>
+                    <p>
+                        La oportunidad no está simplemente en aumentar el volumen de contactos, sino en identificar nuevas empresas con características similares a las que ya generaron reuniones, investigar su potencial y construir cobertura de varios decisores dentro de cada cuenta.
+                    </p>
+                    <div class="pt-2 border-t border-brand-border/70">
+                        <p class="text-white font-semibold">
+                            La evolución recomendada es pasar de una prospección generalista a un modelo de Account-Based Marketing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 2: EVIDENCIA COMERCIAL: QUÉ NOS DICEN LAS 38 REUNIONES        -->
+        <!-- ===================================================================== -->
+        <section id="evidencia" class="py-14 border-b border-brand-border">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 02 · Resultados Históricos</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Evidencia Comercial: Qué nos dicen las 38 reuniones</h2>
+                <p class="text-sm text-brand-muted mt-2">Análisis detallado de la distribución geográfica, sectorial, funcional y sus intersecciones.</p>
+            </div>
+
+            <!-- Grid de 3 dimensiones: Países, Industrias, Áreas -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+                
+                <!-- 2.1 Países -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">Países</h3>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-brand-surface text-brand-tealLight border border-brand-border">Total: 38</span>
+                        </div>
+                        <div class="h-64 mb-5">
+                            <canvas id="chartReunionesPais"></canvas>
+                        </div>
+                        <!-- Tabla exacta -->
+                        <div class="overflow-x-auto mb-5 border border-brand-border rounded-lg">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">País</th>
+                                        <th class="py-2 px-3 text-right">Reuniones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Costa Rica</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">10</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Guatemala</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">8</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Honduras</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                    <tr><td class="py-1.5 px-3">El Salvador</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                    <tr><td class="py-1.5 px-3">Ecuador</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                    <tr><td class="py-1.5 px-3">Nicaragua</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                    <tr><td class="py-1.5 px-3">Estados Unidos</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">República Dominicana</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Panamá</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-brand-surface border border-brand-border/80 rounded-lg p-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-brand-teal mb-2">Insights</p>
+                        <ul class="space-y-1.5 text-xs text-slate-300 list-disc pl-4">
+                            <li>Costa Rica, Guatemala y Honduras concentran 25 reuniones (65,8%).</li>
+                            <li>36 de las 38 reuniones (94,7%) corresponden a países del ICP.</li>
+                            <li>México y Colombia no registraron reuniones y tienen una cobertura muy baja en la BBDD.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2.2 Industrias -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">Industrias</h3>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-brand-surface text-brand-tealLight border border-brand-border">Total: 38</span>
+                        </div>
+                        <div class="h-64 mb-5">
+                            <canvas id="chartReunionesIndustria"></canvas>
+                        </div>
+                        <!-- Tabla exacta -->
+                        <div class="overflow-x-auto mb-5 border border-brand-border rounded-lg">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">Industria</th>
+                                        <th class="py-2 px-3 text-right">Reuniones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Manufactura</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">14</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Retail</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                    <tr><td class="py-1.5 px-3">Servicios</td><td class="py-1.5 px-3 text-right font-semibold">5</td></tr>
+                                    <tr><td class="py-1.5 px-3">Financiero</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                    <tr><td class="py-1.5 px-3">Automotriz</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                    <tr><td class="py-1.5 px-3">Tecnología</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Seguros</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Salud animal</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Partner</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Logística</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Agricultura</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-brand-surface border border-brand-border/80 rounded-lg p-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-brand-teal mb-2">Insights</p>
+                        <ul class="space-y-1.5 text-xs text-slate-300 list-disc pl-4">
+                            <li>Manufactura y Retail concentran 21 reuniones (55,3%).</li>
+                            <li>Manufactura es el sector con mayor evidencia comercial.</li>
+                            <li>Retail presenta una segunda concentración relevante.</li>
+                            <li>Financiero, Automotriz, Seguros y Logística también registraron resultados.</li>
+                            <li>Educación no registró reuniones.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2.3 Áreas funcionales -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">Áreas funcionales</h3>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-brand-surface text-brand-tealLight border border-brand-border">Total: 38</span>
+                        </div>
+                        <div class="h-64 mb-5">
+                            <canvas id="chartReunionesArea"></canvas>
+                        </div>
+                        <!-- Tabla exacta -->
+                        <div class="overflow-x-auto mb-5 border border-brand-border rounded-lg">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">Área</th>
+                                        <th class="py-2 px-3 text-right">Reuniones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Tecnología</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">11</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Marketing y Mercadeo</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Comercial y Ventas</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                    <tr class="bg-brand-teal/5"><td class="py-1.5 px-3 font-medium">Transformación y Digital</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">6</td></tr>
+                                    <tr><td class="py-1.5 px-3">Presidencia y Gerencia General</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                    <tr><td class="py-1.5 px-3">CX y Servicio al Cliente</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                    <tr><td class="py-1.5 px-3">Innovación</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-brand-surface border border-brand-border/80 rounded-lg p-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-brand-teal mb-2">Insights</p>
+                        <ul class="space-y-1.5 text-xs text-slate-300 list-disc pl-4">
+                            <li>Tecnología concentra 11 reuniones.</li>
+                            <li>Marketing y Comercial/Ventas registran 7 cada una.</li>
+                            <li>Transformación y Digital aporta 6.</li>
+                            <li>Las áreas funcionales contempladas en el ICP concentran 34 reuniones (89,5%).</li>
+                            <li>Operaciones no registró reuniones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cruces Relevantes -->
+            <div class="bg-brand-surface border border-brand-border rounded-2xl p-6 sm:p-8">
+                <h3 class="text-lg font-bold text-white mb-1">Cruces relevantes (Industria × Área Funcional)</h3>
+                <p class="text-xs text-brand-muted mb-6">Desglose exacto de los interlocutores que participaron en las reuniones según su sector.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Manufactura -->
+                    <div class="bg-brand-card border border-brand-teal/40 rounded-xl p-4">
+                        <div class="flex items-center justify-between border-b border-brand-border pb-2.5 mb-3">
+                            <span class="font-bold text-white text-sm">Manufactura</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-teal/20 text-brand-tealLight">14</span>
+                        </div>
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex justify-between"><span>Marketing/Mercadeo</span><span class="font-bold text-white">4</span></li>
+                            <li class="flex justify-between"><span>Tecnología</span><span class="font-bold text-white">3</span></li>
+                            <li class="flex justify-between"><span>Comercial</span><span class="font-bold text-white">2</span></li>
+                            <li class="flex justify-between"><span>Transformación</span><span class="font-bold text-white">2</span></li>
+                            <li class="flex justify-between"><span>Ventas</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Presidencia/Gerencia General</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Innovación</span><span class="font-bold text-white">1</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Retail -->
+                    <div class="bg-brand-card border border-brand-teal/40 rounded-xl p-4">
+                        <div class="flex items-center justify-between border-b border-brand-border pb-2.5 mb-3">
+                            <span class="font-bold text-white text-sm">Retail</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-teal/20 text-brand-tealLight">7</span>
+                        </div>
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex justify-between"><span>Tecnología</span><span class="font-bold text-white">3</span></li>
+                            <li class="flex justify-between"><span>Transformación</span><span class="font-bold text-white">2</span></li>
+                            <li class="flex justify-between"><span>Mercadeo</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Ventas</span><span class="font-bold text-white">1</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicios -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between border-b border-brand-border pb-2.5 mb-3">
+                            <span class="font-bold text-white text-sm">Servicios</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">5</span>
+                        </div>
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex justify-between"><span>Presidencia/Gerencia General</span><span class="font-bold text-white">3</span></li>
+                            <li class="flex justify-between"><span>Comercial</span><span class="font-bold text-white">2</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Financiero -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between border-b border-brand-border pb-2.5 mb-3">
+                            <span class="font-bold text-white text-sm">Financiero</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">4</span>
+                        </div>
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex justify-between"><span>Tecnología</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Comercial</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Marketing</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>CX</span><span class="font-bold text-white">1</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Automotriz -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between border-b border-brand-border pb-2.5 mb-3">
+                            <span class="font-bold text-white text-sm">Automotriz</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">2</span>
+                        </div>
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex justify-between"><span>CX</span><span class="font-bold text-white">1</span></li>
+                            <li class="flex justify-between"><span>Marketing</span><span class="font-bold text-white">1</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 3: COMPOSICIÓN DE LA BBDD Y OPORTUNIDADES                     -->
+        <!-- ===================================================================== -->
+        <section id="bbdd" class="py-14 border-b border-brand-border">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 03 · Estructura de Datos</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Composición de la BBDD y Oportunidades</h2>
+                <p class="text-sm text-brand-muted mt-2">Auditoría completa de los 6.102 contactos registrados y su contraste frente a las reuniones generadas.</p>
+            </div>
+
+            <!-- 3 Tablas + Gráficos de Composición -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+                
+                <!-- 3.1 Distribución Geográfica (16 países completos) -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">Distribución geográfica</h3>
+                        <p class="text-xs text-brand-muted mb-4">16 mercados registrados en la base</p>
+                        <div class="overflow-x-auto border border-brand-border rounded-lg mb-4">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">País</th>
+                                        <th class="py-2 px-3 text-right">Contactos</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr><td class="py-1.5 px-3">Costa Rica</td><td class="py-1.5 px-3 text-right font-semibold">1.354</td></tr>
+                                    <tr><td class="py-1.5 px-3">Guatemala</td><td class="py-1.5 px-3 text-right font-semibold">885</td></tr>
+                                    <tr><td class="py-1.5 px-3">Honduras</td><td class="py-1.5 px-3 text-right font-semibold">821</td></tr>
+                                    <tr><td class="py-1.5 px-3">Ecuador</td><td class="py-1.5 px-3 text-right font-semibold">797</td></tr>
+                                    <tr><td class="py-1.5 px-3">Panamá</td><td class="py-1.5 px-3 text-right font-semibold">575</td></tr>
+                                    <tr><td class="py-1.5 px-3">El Salvador</td><td class="py-1.5 px-3 text-right font-semibold">571</td></tr>
+                                    <tr><td class="py-1.5 px-3">Estados Unidos</td><td class="py-1.5 px-3 text-right">453</td></tr>
+                                    <tr><td class="py-1.5 px-3">Nicaragua</td><td class="py-1.5 px-3 text-right">366</td></tr>
+                                    <tr><td class="py-1.5 px-3">República Dominicana</td><td class="py-1.5 px-3 text-right">120</td></tr>
+                                    <tr><td class="py-1.5 px-3">Puerto Rico</td><td class="py-1.5 px-3 text-right">75</td></tr>
+                                    <tr><td class="py-1.5 px-3">Chile</td><td class="py-1.5 px-3 text-right">29</td></tr>
+                                    <tr><td class="py-1.5 px-3">Jamaica</td><td class="py-1.5 px-3 text-right">28</td></tr>
+                                    <tr><td class="py-1.5 px-3">Trinidad y Tobago</td><td class="py-1.5 px-3 text-right">17</td></tr>
+                                    <tr><td class="py-1.5 px-3">Colombia</td><td class="py-1.5 px-3 text-right">9</td></tr>
+                                    <tr><td class="py-1.5 px-3">México</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr><td class="py-1.5 px-3">Argentina</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                    <tr class="bg-brand-surface font-bold text-white">
+                                        <td class="py-2 px-3">Total</td>
+                                        <td class="py-2 px-3 text-right text-brand-tealLight">6.102</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5 text-xs text-slate-300">
+                        <strong class="text-white">5.379 contactos (88,2%)</strong> pertenecen a países del ICP. Los <strong class="text-white">723 restantes</strong> están fuera de los mercados objetivo.
+                    </div>
+                </div>
+
+                <!-- 3.2 Distribución por Industria -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">Distribución por industria</h3>
+                        <p class="text-xs text-brand-muted mb-4">Volumen de contactos por sector</p>
+                        <div class="h-56 mb-4">
+                            <canvas id="chartBBDDIndustria"></canvas>
+                        </div>
+                        <div class="overflow-x-auto border border-brand-border rounded-lg">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">Industria</th>
+                                        <th class="py-2 px-3 text-right">Contactos</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr><td class="py-1.5 px-3">Manufactura</td><td class="py-1.5 px-3 text-right font-semibold">1.035</td></tr>
+                                    <tr><td class="py-1.5 px-3">Financiero</td><td class="py-1.5 px-3 text-right font-semibold">1.252</td></tr>
+                                    <tr><td class="py-1.5 px-3">Retail</td><td class="py-1.5 px-3 text-right font-semibold">648</td></tr>
+                                    <tr><td class="py-1.5 px-3">Partner</td><td class="py-1.5 px-3 text-right">446</td></tr>
+                                    <tr><td class="py-1.5 px-3">Automotriz</td><td class="py-1.5 px-3 text-right">261</td></tr>
+                                    <tr><td class="py-1.5 px-3">Seguros</td><td class="py-1.5 px-3 text-right">289</td></tr>
+                                    <tr><td class="py-1.5 px-3">Consumo masivo</td><td class="py-1.5 px-3 text-right">239</td></tr>
+                                    <tr><td class="py-1.5 px-3">Logística</td><td class="py-1.5 px-3 text-right">170</td></tr>
+                                    <tr><td class="py-1.5 px-3">Educación</td><td class="py-1.5 px-3 text-right">50</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.3 Distribución por Área -->
+                <div class="bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">Distribución por área</h3>
+                        <p class="text-xs text-brand-muted mb-4">Cobertura funcional en BBDD</p>
+                        <div class="h-56 mb-4">
+                            <canvas id="chartBBDDArea"></canvas>
+                        </div>
+                        <div class="overflow-x-auto border border-brand-border rounded-lg mb-4">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-brand-surface text-brand-muted uppercase">
+                                    <tr>
+                                        <th class="py-2 px-3">Área</th>
+                                        <th class="py-2 px-3 text-right">Contactos</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-slate-200">
+                                    <tr><td class="py-1.5 px-3">Tecnología</td><td class="py-1.5 px-3 text-right font-semibold">1.039</td></tr>
+                                    <tr><td class="py-1.5 px-3">Comercial y Ventas</td><td class="py-1.5 px-3 text-right font-semibold">1.026</td></tr>
+                                    <tr><td class="py-1.5 px-3">Marketing y Mercadeo</td><td class="py-1.5 px-3 text-right font-semibold">733</td></tr>
+                                    <tr><td class="py-1.5 px-3">Presidencia y Gerencia General</td><td class="py-1.5 px-3 text-right">526</td></tr>
+                                    <tr><td class="py-1.5 px-3">Transformación y Digital</td><td class="py-1.5 px-3 text-right">170</td></tr>
+                                    <tr><td class="py-1.5 px-3">CX y Servicio al Cliente</td><td class="py-1.5 px-3 text-right">148</td></tr>
+                                    <tr><td class="py-1.5 px-3">Consultoría</td><td class="py-1.5 px-3 text-right">142</td></tr>
+                                    <tr><td class="py-1.5 px-3">Operaciones</td><td class="py-1.5 px-3 text-right">111</td></tr>
+                                    <tr><td class="py-1.5 px-3">Innovación</td><td class="py-1.5 px-3 text-right">60</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5 text-xs text-slate-300">
+                        <strong class="text-white">4.057 contactos</strong> tienen un área identificada y <strong class="text-white">2.045</strong> no tienen área identificada.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.4 Comparación entre BBDD y reuniones -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Comparación entre BBDD y reuniones</h3>
+                        <p class="text-xs text-brand-muted mt-1">Contraste directo por segmento entre volumen disponible y tracción registrada.</p>
+                    </div>
+                </div>
+
+                <!-- Nota metodológica obligatoria destacada -->
+                <div class="bg-brand-obsidian border-l-4 border-brand-coral rounded-r-lg p-4 mb-6 text-xs sm:text-sm text-slate-300">
+                    <strong class="text-white font-semibold">Importante:</strong> estos valores permiten comparar la composición de la base con los resultados comerciales, pero <strong class="text-white">no representan tasas de conversión</strong>. No se conoce el número exacto de contactos efectivamente trabajados por cada segmento.
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Tabla comparativa completa -->
+                    <div class="lg:col-span-5 overflow-x-auto border border-brand-border rounded-xl">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-brand-surface text-brand-muted uppercase">
+                                <tr>
+                                    <th class="py-2.5 px-3">Segmento</th>
+                                    <th class="py-2.5 px-3 text-right">Contactos</th>
+                                    <th class="py-2.5 px-3 text-right">Reuniones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-border text-slate-200">
+                                <!-- Países -->
+                                <tr class="bg-brand-surface/50"><td colspan="3" class="py-1.5 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-teal">Mercados</td></tr>
+                                <tr><td class="py-1.5 px-3">Costa Rica</td><td class="py-1.5 px-3 text-right">1.354</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">10</td></tr>
+                                <tr><td class="py-1.5 px-3">Guatemala</td><td class="py-1.5 px-3 text-right">885</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">8</td></tr>
+                                <tr><td class="py-1.5 px-3">Honduras</td><td class="py-1.5 px-3 text-right">821</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                <tr><td class="py-1.5 px-3">Ecuador</td><td class="py-1.5 px-3 text-right">797</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                <tr><td class="py-1.5 px-3">Panamá</td><td class="py-1.5 px-3 text-right">575</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                <tr><td class="py-1.5 px-3">El Salvador</td><td class="py-1.5 px-3 text-right">571</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                <tr><td class="py-1.5 px-3">Nicaragua</td><td class="py-1.5 px-3 text-right">366</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                <!-- Industrias -->
+                                <tr class="bg-brand-surface/50"><td colspan="3" class="py-1.5 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-teal">Industrias</td></tr>
+                                <tr><td class="py-1.5 px-3">Manufactura</td><td class="py-1.5 px-3 text-right">1.035</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">14</td></tr>
+                                <tr><td class="py-1.5 px-3">Financiero</td><td class="py-1.5 px-3 text-right">1.252</td><td class="py-1.5 px-3 text-right font-semibold">4</td></tr>
+                                <tr><td class="py-1.5 px-3">Retail</td><td class="py-1.5 px-3 text-right">648</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                <tr><td class="py-1.5 px-3">Automotriz</td><td class="py-1.5 px-3 text-right">261</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                <tr><td class="py-1.5 px-3">Seguros</td><td class="py-1.5 px-3 text-right">289</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                <tr><td class="py-1.5 px-3">Logística</td><td class="py-1.5 px-3 text-right">170</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                                <tr><td class="py-1.5 px-3">Educación</td><td class="py-1.5 px-3 text-right">50</td><td class="py-1.5 px-3 text-right text-brand-coral font-semibold">0</td></tr>
+                                <!-- Áreas -->
+                                <tr class="bg-brand-surface/50"><td colspan="3" class="py-1.5 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-teal">Áreas Funcionales</td></tr>
+                                <tr><td class="py-1.5 px-3">Tecnología</td><td class="py-1.5 px-3 text-right">1.039</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">11</td></tr>
+                                <tr><td class="py-1.5 px-3">Comercial y Ventas</td><td class="py-1.5 px-3 text-right">1.026</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                <tr><td class="py-1.5 px-3">Marketing y Mercadeo</td><td class="py-1.5 px-3 text-right">733</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">7</td></tr>
+                                <tr><td class="py-1.5 px-3">Transformación y Digital</td><td class="py-1.5 px-3 text-right">170</td><td class="py-1.5 px-3 text-right font-bold text-brand-tealLight">6</td></tr>
+                                <tr><td class="py-1.5 px-3">CX y Servicio al Cliente</td><td class="py-1.5 px-3 text-right">148</td><td class="py-1.5 px-3 text-right">2</td></tr>
+                                <tr><td class="py-1.5 px-3">Operaciones</td><td class="py-1.5 px-3 text-right">111</td><td class="py-1.5 px-3 text-right text-brand-coral font-semibold">0</td></tr>
+                                <tr><td class="py-1.5 px-3">Innovación</td><td class="py-1.5 px-3 text-right">60</td><td class="py-1.5 px-3 text-right">1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Gráficos comparativos visuales -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="bg-brand-surface border border-brand-border rounded-xl p-5">
+                            <h4 class="text-sm font-bold text-white mb-3">Contraste Visual: Contactos vs. Reuniones por Industria</h4>
+                            <div class="h-64">
+                                <canvas id="chartCompIndustria"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-xl p-5">
+                            <h4 class="text-sm font-bold text-white mb-3">Contraste Visual: Contactos vs. Reuniones por Área Funcional</h4>
+                            <div class="h-64">
+                                <canvas id="chartCompArea"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 4: CONCLUSIONES ESTRATÉGICAS: DÓNDE DEBE ENFOCARSE XUMTECH     -->
+        <!-- ===================================================================== -->
+        <section id="estrategia" class="py-14 border-b border-brand-border">
+            <div class="mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 04 · Núcleo de Decisión</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Conclusiones Estratégicas: Dónde debe enfocarse XUMTECH</h2>
+                <p class="text-sm text-brand-muted mt-2">Definición de prioridades comerciales, criterios de selección de cuentas y asignación inicial de esfuerzo.</p>
+            </div>
+
+            <!-- 4.1 PRIORIZACIÓN DE MERCADOS + MAPA REGIONAL -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.1.</span> Priorización de mercados
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    <!-- Tarjetas de Prioridad de Mercados -->
+                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- Prioridad 1 -->
+                        <div class="bg-brand-card border-2 border-brand-teal rounded-xl p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-brand-teal text-brand-obsidian">Prioridad 1</span>
+                                    <span class="text-xs font-bold text-brand-tealLight">65,8% de reuniones</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2">Costa Rica, Guatemala y Honduras</h4>
+                                <ul class="text-xs text-slate-300 space-y-1 mb-3">
+                                    <li>• <strong>3.060 contactos</strong> en la BBDD.</li>
+                                    <li>• <strong>25 reuniones</strong> generadas.</li>
+                                    <li>• <strong>65,8%</strong> de las reuniones totales.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-brand-surface border border-brand-border rounded-lg p-3 text-xs text-slate-200">
+                                <strong class="text-brand-tealLight">Recomendación:</strong> construir la primera cartera ABM de nuevas cuentas sobre estos países, priorizando Manufactura, Retail y empresas con necesidades de transformación digital.
+                            </div>
+                        </div>
+
+                        <!-- Prioridad 2 -->
+                        <div class="bg-brand-card border border-brand-border rounded-xl p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">Prioridad 2</span>
+                                    <span class="text-xs text-brand-muted">8 reuniones</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2">Ecuador y El Salvador</h4>
+                                <ul class="text-xs text-slate-300 space-y-1 mb-3">
+                                    <li>• <strong>Ecuador:</strong> 797 contactos y 4 reuniones.</li>
+                                    <li>• <strong>El Salvador:</strong> 571 contactos y 4 reuniones.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-brand-surface border border-brand-border rounded-lg p-3 text-xs text-slate-300">
+                                Ecuador requiere optimizar la selección de cuentas y los perfiles abordados. El Salvador presenta una señal interesante en el sector Financiero.
+                            </div>
+                        </div>
+
+                        <!-- Prioridad 3 -->
+                        <div class="bg-brand-card border border-brand-border rounded-xl p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-slate-700 text-slate-200">Prioridad 3</span>
+                                    <span class="text-xs text-brand-muted">1 reunión</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2">Panamá</h4>
+                                <ul class="text-xs text-slate-300 space-y-1 mb-3">
+                                    <li>• <strong>575 contactos.</strong></li>
+                                    <li>• <strong>1 reunión.</strong></li>
+                                </ul>
+                            </div>
+                            <div class="bg-brand-surface border border-brand-border rounded-lg p-3 text-xs text-slate-300">
+                                Antes de ampliar la base, conviene revisar las cuentas existentes, los cargos y la estrategia de acercamiento.
+                            </div>
+                        </div>
+
+                        <!-- Desarrollo de mercado -->
+                        <div class="bg-brand-card border border-brand-border rounded-xl p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold bg-brand-coral/20 text-brand-coral border border-brand-coral/30">Desarrollo de mercado</span>
+                                    <span class="text-xs text-brand-muted">0 reuniones</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2">México y Colombia</h4>
+                                <ul class="text-xs text-slate-300 space-y-1 mb-3">
+                                    <li>• <strong>México:</strong> 1 contacto.</li>
+                                    <li>• <strong>Colombia:</strong> 9 contactos.</li>
+                                    <li>• Ninguno registró reuniones.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-brand-surface border border-brand-border rounded-lg p-3 text-xs text-slate-300">
+                                No existe suficiente cobertura para evaluar su desempeño. Se recomienda desarrollar una primera cartera de cuentas objetivo, evitando cargar contactos indiscriminadamente.
+                            </div>
+                        </div>
+
+                        <!-- Nicaragua nota complementaria -->
+                        <div class="sm:col-span-2 bg-brand-surface border border-brand-border rounded-xl px-5 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Mercado Complementario
+                            </span>
+                            <p class="text-xs text-slate-300"><strong class="text-white">Nicaragua:</strong> mantener como mercado complementario, con 366 contactos y 2 reuniones.</p>
+                        </div>
+                    </div>
+
+                    <!-- Mapa Geográfico Interactivo y Amigable de Centroamérica y Latinoamérica -->
+                    <div class="lg:col-span-5 bg-brand-card border border-brand-border rounded-xl p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                                    Mapa de Priorización Regional
+                                </h4>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-brand-surface text-brand-tealLight border border-brand-border">Interactivo</span>
+                            </div>
+                            <p class="text-xs text-brand-muted mb-3">Haz clic o pasa el cursor sobre cada país para inspeccionar su rol estratégico.</p>
+
+                            <!-- Filtros rápidos por nivel de prioridad -->
+                            <div class="flex flex-wrap gap-1.5 mb-3 no-print" id="map-filters">
+                                <button type="button" data-filter="all" class="map-filter-btn active px-2.5 py-1 rounded text-[11px] font-semibold bg-brand-teal text-brand-obsidian transition-colors cursor-pointer">Todos (9)</button>
+                                <button type="button" data-filter="p1" class="map-filter-btn px-2.5 py-1 rounded text-[11px] font-semibold bg-brand-surface text-slate-300 hover:text-white border border-brand-border transition-colors cursor-pointer">Prioridad 1</button>
+                                <button type="button" data-filter="p2" class="map-filter-btn px-2.5 py-1 rounded text-[11px] font-semibold bg-brand-surface text-slate-300 hover:text-white border border-brand-border transition-colors cursor-pointer">Prioridad 2</button>
+                                <button type="button" data-filter="p3" class="map-filter-btn px-2.5 py-1 rounded text-[11px] font-semibold bg-brand-surface text-slate-300 hover:text-white border border-brand-border transition-colors cursor-pointer">P3 / Compl.</button>
+                                <button type="button" data-filter="dev" class="map-filter-btn px-2.5 py-1 rounded text-[11px] font-semibold bg-brand-surface text-slate-300 hover:text-white border border-brand-border transition-colors cursor-pointer">Desarrollo</button>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor visual del Mapa Geográfico Limpio -->
+                        <div class="relative bg-brand-obsidian border border-brand-border rounded-xl p-3 my-auto">
+                            <!-- Cuadrícula sutil de coordenadas -->
+                            <svg viewBox="0 0 460 360" class="w-full h-auto select-none" role="img" aria-label="Mapa interactivo de priorización de mercados XUMTECH">
+                                <defs>
+                                    <pattern id="geoGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                                        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#16202C" stroke-width="0.8"/>
+                                    </pattern>
+                                    <filter id="glowTeal" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                                    </filter>
+                                </defs>
+                                <rect width="460" height="360" fill="url(#geoGrid)" rx="8"/>
+
+                                <!-- Etiquetas de contexto oceánico -->
+                                <text x="28" y="235" fill="#263547" font-size="10" font-weight="700" letter-spacing="2">OCÉANO PACÍFICO</text>
+                                <text x="275" y="95" fill="#263547" font-size="10" font-weight="700" letter-spacing="2">MAR CARIBE</text>
+
+                                <!-- Masa continental de contexto (Belice / Sudamérica contigua) -->
+                                <path d="M 148,108 L 157,108 L 157,125 L 148,125 Z" fill="#18222F" stroke="#263547" stroke-width="1"/>
+                                <path d="M 315,215 L 430,225 L 445,350 L 265,350 L 250,315 L 285,295 Z" fill="#131B24" stroke="#1E293B" stroke-width="1"/>
+
+                                <!-- 1. MÉXICO (Desarrollo de mercado) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="mexico" data-tier="dev">
+                                    <path d="M 24,36 L 86,44 L 114,82 L 136,102 L 158,92 L 166,104 L 144,124 L 122,126 L 86,104 L 54,78 L 22,52 Z" 
+                                          fill="#1E2631" stroke="#E63222" stroke-width="2" class="country-shape hover:brightness-125 transition-all"/>
+                                    <circle cx="96" cy="84" r="5" fill="#E63222"/>
+                                    <line x1="96" y1="84" x2="128" y2="54" stroke="#E63222" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <rect x="128" y="38" width="118" height="30" rx="5" fill="#121820" stroke="#E63222" stroke-width="1"/>
+                                    <text x="136" y="51" fill="#FFFFFF" font-size="10" font-weight="700">México</text>
+                                    <text x="136" y="62" fill="#F87171" font-size="8.5" font-weight="600">Desarrollo · 1 cont. / 0 reun.</text>
+                                </g>
+
+                                <!-- 2. GUATEMALA (Prioridad 1) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="guatemala" data-tier="p1">
+                                    <path d="M 134,114 L 152,114 L 154,132 L 142,142 L 128,134 Z" 
+                                          fill="#139A91" stroke="#1CC4B9" stroke-width="1.8" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="132" y1="126" x2="108" y2="126" stroke="#1CC4B9" stroke-width="1"/>
+                                    <rect x="12" y="112" width="96" height="28" rx="5" fill="#121820" stroke="#139A91" stroke-width="1"/>
+                                    <text x="19" y="124" fill="#FFFFFF" font-size="9.5" font-weight="700">Guatemala (P1)</text>
+                                    <text x="19" y="135" fill="#1CC4B9" font-size="8.5">885 cont. · 8 reun.</text>
+                                </g>
+
+                                <!-- 3. EL SALVADOR (Prioridad 2) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="elsalvador" data-tier="p2">
+                                    <path d="M 136,143 L 156,145 L 154,154 L 135,151 Z" 
+                                          fill="#0284C7" stroke="#38BDF8" stroke-width="1.8" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="138" y1="149" x2="112" y2="164" stroke="#38BDF8" stroke-width="1"/>
+                                    <rect x="12" y="152" width="102" height="28" rx="5" fill="#121820" stroke="#0284C7" stroke-width="1"/>
+                                    <text x="19" y="164" fill="#FFFFFF" font-size="9.5" font-weight="700">El Salvador (P2)</text>
+                                    <text x="19" y="175" fill="#38BDF8" font-size="8.5">571 cont. · 4 reun.</text>
+                                </g>
+
+                                <!-- 4. HONDURAS (Prioridad 1) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="honduras" data-tier="p1">
+                                    <path d="M 154,129 L 196,129 L 204,142 L 176,149 L 156,144 Z" 
+                                          fill="#139A91" stroke="#1CC4B9" stroke-width="1.8" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="184" y1="133" x2="218" y2="114" stroke="#1CC4B9" stroke-width="1"/>
+                                    <rect x="218" y="99" width="104" height="28" rx="5" fill="#121820" stroke="#139A91" stroke-width="1"/>
+                                    <text x="225" y="111" fill="#FFFFFF" font-size="9.5" font-weight="700">Honduras (P1)</text>
+                                    <text x="225" y="122" fill="#1CC4B9" font-size="8.5">821 cont. · 7 reun.</text>
+                                </g>
+
+                                <!-- 5. NICARAGUA (Complementario) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="nicaragua" data-tier="p3">
+                                    <path d="M 164,149 L 202,143 L 198,174 L 174,172 Z" 
+                                          fill="#334155" stroke="#94A3B8" stroke-width="1.5" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="200" y1="156" x2="232" y2="148" stroke="#94A3B8" stroke-width="1"/>
+                                    <rect x="232" y="135" width="112" height="28" rx="5" fill="#121820" stroke="#475569" stroke-width="1"/>
+                                    <text x="239" y="147" fill="#E2E8F0" font-size="9.5" font-weight="700">Nicaragua (Compl.)</text>
+                                    <text x="239" y="158" fill="#94A3B8" font-size="8.5">366 cont. · 2 reun.</text>
+                                </g>
+
+                                <!-- 6. COSTA RICA (Prioridad 1) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="costarica" data-tier="p1">
+                                    <path d="M 176,174 L 198,175 L 210,192 L 192,197 L 178,186 Z" 
+                                          fill="#139A91" stroke="#1CC4B9" stroke-width="2" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="184" y1="188" x2="148" y2="202" stroke="#1CC4B9" stroke-width="1.2"/>
+                                    <rect x="28" y="190" width="120" height="30" rx="5" fill="#121820" stroke="#1CC4B9" stroke-width="1.3"/>
+                                    <text x="36" y="203" fill="#FFFFFF" font-size="10" font-weight="800">Costa Rica (P1)</text>
+                                    <text x="36" y="214" fill="#1CC4B9" font-size="8.5" font-weight="600">1.354 cont. · 10 reun.</text>
+                                </g>
+
+                                <!-- 7. PANAMÁ (Prioridad 3) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="panama" data-tier="p3">
+                                    <path d="M 208,192 Q 236,186 266,198 L 262,209 Q 236,199 208,203 Z" 
+                                          fill="#475569" stroke="#CBD5E1" stroke-width="1.5" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="244" y1="192" x2="268" y2="178" stroke="#94A3B8" stroke-width="1"/>
+                                    <rect x="268" y="168" width="104" height="28" rx="5" fill="#121820" stroke="#64748B" stroke-width="1"/>
+                                    <text x="275" y="180" fill="#FFFFFF" font-size="9.5" font-weight="700">Panamá (P3)</text>
+                                    <text x="275" y="191" fill="#94A3B8" font-size="8.5">575 cont. · 1 reun.</text>
+                                </g>
+
+                                <!-- 8. COLOMBIA (Desarrollo de mercado) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="colombia" data-tier="dev">
+                                    <path d="M 266,204 L 306,198 L 324,228 L 314,268 L 278,274 L 264,244 Z" 
+                                          fill="#1E2631" stroke="#E63222" stroke-width="2" class="country-shape hover:brightness-125 transition-all"/>
+                                    <circle cx="294" cy="236" r="5" fill="#E63222"/>
+                                    <line x1="312" y1="236" x2="334" y2="236" stroke="#E63222" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <rect x="334" y="220" width="116" height="30" rx="5" fill="#121820" stroke="#E63222" stroke-width="1"/>
+                                    <text x="341" y="233" fill="#FFFFFF" font-size="10" font-weight="700">Colombia</text>
+                                    <text x="341" y="244" fill="#F87171" font-size="8.5" font-weight="600">Desarrollo · 9 cont. / 0 reun.</text>
+                                </g>
+
+                                <!-- 9. ECUADOR (Prioridad 2) -->
+                                <g class="map-country cursor-pointer transition-opacity duration-200" data-country="ecuador" data-tier="p2">
+                                    <path d="M 254,268 L 284,274 L 278,312 L 246,304 Z" 
+                                          fill="#0284C7" stroke="#38BDF8" stroke-width="1.8" class="country-shape hover:brightness-110 transition-all"/>
+                                    <line x1="252" y1="290" x2="216" y2="290" stroke="#38BDF8" stroke-width="1"/>
+                                    <rect x="108" y="275" width="108" height="30" rx="5" fill="#121820" stroke="#0284C7" stroke-width="1"/>
+                                    <text x="115" y="288" fill="#FFFFFF" font-size="10" font-weight="700">Ecuador (P2)</text>
+                                    <text x="115" y="299" fill="#38BDF8" font-size="8.5">797 cont. · 4 reun.</text>
+                                </g>
+                            </svg>
+
+                            <!-- Panel dinámico de detalle del país seleccionado -->
+                            <div id="map-detail-panel" class="mt-3 bg-brand-surface border border-brand-border rounded-lg p-3 text-xs">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span id="map-detail-title" class="font-bold text-white">Costa Rica · Prioridad 1</span>
+                                    <span id="map-detail-metrics" class="font-semibold text-brand-tealLight">1.354 contactos · 10 reuniones</span>
+                                </div>
+                                <p id="map-detail-desc" class="text-slate-300 leading-relaxed">
+                                    Mercado líder en tracción histórica. Construir la primera cartera ABM de nuevas cuentas priorizando Manufactura, Retail y transformación digital.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Leyenda del Mapa -->
+                        <div class="grid grid-cols-2 gap-2 mt-4 text-[11px]">
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-xs bg-brand-teal"></span><span class="text-slate-200">Prioridad 1 (Foco ABM)</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-xs bg-sky-600"></span><span class="text-slate-200">Prioridad 2 (Optimización)</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-xs bg-slate-600"></span><span class="text-slate-200">Prioridad 3 / Compl.</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-xs border border-brand-coral bg-brand-card"></span><span class="text-slate-200">Desarrollo de mercado</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.2 PRIORIZACIÓN DE INDUSTRIAS -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.2.</span> Priorización de industrias
+                </h3>
+
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden mb-4">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-brand-surface text-brand-muted uppercase text-xs">
+                                <tr>
+                                    <th class="py-3.5 px-4 w-24">Prioridad</th>
+                                    <th class="py-3.5 px-4 w-48">Industria</th>
+                                    <th class="py-3.5 px-4">Motivo</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-border text-slate-200">
+                                <tr class="bg-brand-teal/15">
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-teal text-brand-obsidian font-extrabold text-xs">1</span></td>
+                                    <td class="py-3.5 px-4 font-bold text-white text-base">Manufactura</td>
+                                    <td class="py-3.5 px-4 text-slate-100">Mayor cantidad de reuniones y evidencia en distintos países</td>
+                                </tr>
+                                <tr class="bg-brand-teal/10">
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-teal text-brand-obsidian font-extrabold text-xs">2</span></td>
+                                    <td class="py-3.5 px-4 font-bold text-white text-base">Retail</td>
+                                    <td class="py-3.5 px-4 text-slate-100">Siete reuniones y una base relevante</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">3</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Financiero</td>
+                                    <td class="py-3.5 px-4 text-slate-300">Gran volumen de contactos, pero requiere mejorar la efectividad</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">4</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Consumo masivo</td>
+                                    <td class="py-3.5 px-4 text-slate-300">Empresas de alimentos presentes en los resultados</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">5</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Automotriz</td>
+                                    <td class="py-3.5 px-4 text-slate-300">Dos reuniones y 261 contactos</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">6</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Logística</td>
+                                    <td class="py-3.5 px-4 text-slate-300">Sector objetivo con presencia, pero poca evidencia</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">7</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Seguros</td>
+                                    <td class="py-3.5 px-4 text-slate-300">289 contactos y una reunión</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-4"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-surface border border-brand-border text-slate-200 font-bold text-xs">8</span></td>
+                                    <td class="py-3.5 px-4 font-semibold text-white">Educación</td>
+                                    <td class="py-3.5 px-4 text-slate-300">50 contactos y ninguna reunión</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-brand-surface border border-brand-border rounded-xl p-5 space-y-2 text-xs sm:text-sm text-slate-300">
+                    <p>La recomendación no es abandonar los sectores con menor número de reuniones, sino distribuir el esfuerzo según la evidencia y el potencial de las cuentas.</p>
+                    <p class="text-white font-medium">Manufactura y Retail deben ser los principales sectores para construir el primer modelo ABM. Financiero debe trabajarse como un frente de optimización, no de expansión indiscriminada.</p>
+                </div>
+            </div>
+
+            <!-- 4.3 PRIORIZACIÓN DE ÁREAS Y PERFILES -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.3.</span> Priorización de áreas y perfiles
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                    <!-- 1 -->
+                    <div class="bg-brand-card border border-brand-teal/50 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold text-brand-tealLight uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                Prioridad 1
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-teal/20 text-brand-tealLight">#1</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Tecnología</h4>
+                        <p class="text-xs text-slate-300">CIO, CTO, directores y gerentes de TI</p>
+                    </div>
+                    <!-- 2 -->
+                    <div class="bg-brand-card border border-brand-teal/50 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold text-brand-tealLight uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Prioridad 2
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-teal/20 text-brand-tealLight">#2</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Transformación y Digital</h4>
+                        <p class="text-xs text-slate-300">CDO, directores de transformación y líderes digitales</p>
+                    </div>
+                    <!-- 3 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                Prioridad 3
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#3</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Comercial y Ventas</h4>
+                        <p class="text-xs text-slate-300">CCO, directores comerciales y gerentes de ventas</p>
+                    </div>
+                    <!-- 4 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                                Prioridad 4
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#4</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Marketing y Mercadeo</h4>
+                        <p class="text-xs text-slate-300">CMO, directores de marketing y marketing digital</p>
+                    </div>
+                    <!-- 5 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                Prioridad 5
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#5</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Presidencia y Gerencia General</h4>
+                        <p class="text-xs text-slate-300">CEO, gerentes generales y socios</p>
+                    </div>
+                    <!-- 6 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                                Prioridad 6
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#6</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">CX y Servicio al Cliente</h4>
+                        <p class="text-xs text-slate-300">Responsables de experiencia, canales, atención y postventa</p>
+                    </div>
+                    <!-- 7 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Prioridad 7
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#7</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Operaciones</h4>
+                        <p class="text-xs text-slate-300">COO, directores y gerentes de operaciones</p>
+                    </div>
+                    <!-- 8 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                Prioridad 8
+                            </span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-surface text-slate-300">#8</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1.5">Innovación</h4>
+                        <p class="text-xs text-slate-300">Chief Innovation Officer y responsables de innovación</p>
+                    </div>
+                </div>
+
+                <div class="bg-brand-surface border border-brand-border rounded-xl p-5 space-y-2 text-xs sm:text-sm text-slate-300">
+                    <p>Tecnología debe seguir siendo una puerta de entrada importante. También conviene aumentar la cobertura de Transformación y Digital, CX, Operaciones e Innovación dentro de las cuentas objetivo.</p>
+                    <p class="text-white font-medium">Para ABM, la meta debe ser cubrir varios perfiles dentro de cada cuenta. No se trata de generar una reunión con un contacto aislado, sino de construir acceso a los responsables que intervienen en la decisión.</p>
+                </div>
+            </div>
+
+            <!-- 4.4 TIPOS DE CUENTAS EN LOS QUE DEBERÍA ENFOCARSE XUMTECH -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.4.</span> Tipos de cuentas en los que debería enfocarse XUMTECH
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <!-- Muy Alta 1 -->
+                    <div class="bg-brand-card border border-brand-teal rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-brand-teal text-brand-obsidian mb-3">Muy alta</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Manufactura de gran escala</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Operaciones complejas, varias unidades de negocio y procesos comerciales y tecnológicos relevantes</p>
+                    </div>
+                    <!-- Muy Alta 2 -->
+                    <div class="bg-brand-card border border-brand-teal rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-brand-teal text-brand-obsidian mb-3">Muy alta</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Retail y cadenas comerciales</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Múltiples sucursales, canales de venta, fidelización y experiencia del cliente</p>
+                    </div>
+                    <!-- Alta 1 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-3">Alta</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Empresas financieras</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Operaciones de canales, servicios digitales, experiencia y automatización</p>
+                    </div>
+                    <!-- Alta 2 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-3">Alta</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Consumo masivo</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Distribución, comercialización, gestión de canales y procesos operativos</p>
+                    </div>
+                    <!-- Media 1 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-700 text-slate-200 mb-3">Media</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Automotriz</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Redes comerciales, concesionarios, postventa y experiencia del cliente</p>
+                    </div>
+                    <!-- Media 2 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-700 text-slate-200 mb-3">Media</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Seguros</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Canales, atención, procesos y servicios digitales</p>
+                    </div>
+                    <!-- Media 3 -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-700 text-slate-200 mb-3">Media</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Logística</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Operaciones, integración tecnológica y gestión comercial</p>
+                    </div>
+                    <!-- Exploratoria -->
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-5">
+                        <span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-brand-surface border border-brand-border text-brand-muted mb-3">Exploratoria</span>
+                        <h4 class="font-bold text-white text-sm mb-2">Educación</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">Transformación y servicios digitales</p>
+                    </div>
+                </div>
+
+                <!-- Checklist de características de cuentas prioritarias -->
+                <div class="bg-brand-surface border border-brand-border rounded-xl p-6">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Características que deben reunir las cuentas prioritarias</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-200">
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Más de 200 empleados.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Facturación anual dentro del rango definido en el ICP.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Presencia en países objetivo.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Pertenencia a una industria prioritaria.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Necesidades relacionadas con transformación digital, automatización, gestión comercial, marketing digital o experiencia del cliente.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Existencia de varios interlocutores que puedan participar en una decisión de compra.</span>
+                        </div>
+                        <div class="flex items-start gap-2.5 md:col-span-2">
+                            <span class="text-brand-teal font-bold mt-0.5">✓</span>
+                            <span>Señales de crecimiento, modernización, expansión o transformación de procesos.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.5 CRITERIOS PARA SELECCIONAR CUENTAS ABM (MATRIZ 100 PTS) -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.5.</span> Criterios para seleccionar cuentas ABM
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Matriz de puntuación de 100 puntos -->
+                    <div class="lg:col-span-8 bg-brand-card border border-brand-border rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-base font-bold text-white">Matriz de puntuación de 100 puntos</h4>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded bg-brand-teal/20 text-brand-tealLight">Escala: 100 pts</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Criterio 1 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Alineación con industria ICP</span>
+                                    <span class="text-brand-tealLight">20 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 20%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Manufactura, Retail, Financiero, Automotriz, Logística, Consumo masivo, Seguros y Educación</p>
+                            </div>
+
+                            <!-- Criterio 2 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Alineación geográfica</span>
+                                    <span class="text-brand-tealLight">10 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 10%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Países objetivo, con prioridad en mercados con resultados</p>
+                            </div>
+
+                            <!-- Criterio 3 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Tamaño y facturación</span>
+                                    <span class="text-brand-tealLight">20 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 20%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Más de 200 empleados y ventas dentro del rango definido</p>
+                            </div>
+
+                            <!-- Criterio 4 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Potencial de transformación</span>
+                                    <span class="text-brand-tealLight">20 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 20%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Necesidades de automatización, digitalización, gestión comercial y experiencia</p>
+                            </div>
+
+                            <!-- Criterio 5 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Acceso a decisores</span>
+                                    <span class="text-brand-tealLight">15 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 15%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Disponibilidad de CIO, CDO, CMO, CCO, COO, CEO y gerencias</p>
+                            </div>
+
+                            <!-- Criterio 6 -->
+                            <div class="bg-brand-surface border border-brand-border rounded-xl p-4">
+                                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-white mb-1.5">
+                                    <span>Señales de oportunidad</span>
+                                    <span class="text-brand-tealLight">15 pts</span>
+                                </div>
+                                <div class="w-full bg-brand-obsidian h-2 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-brand-teal h-full" style="width: 15%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300">Expansión, transformación, nuevos canales, modernización o iniciativas digitales</p>
+                            </div>
+
+                            <!-- Total -->
+                            <div class="flex items-center justify-between bg-brand-obsidian border border-brand-teal/40 rounded-xl px-4 py-3 text-sm font-extrabold text-white">
+                                <span>Total Matriz ABM</span>
+                                <span class="text-brand-tealLight">100 puntos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clasificación de cuentas (Tier 1, Tier 2, Tier 3) -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <h4 class="text-base font-bold text-white">Clasificación de cuentas</h4>
+                        
+                        <div class="bg-brand-card border-l-4 border-brand-teal rounded-r-xl p-5">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-brand-tealLight">Tier 1 – Estratégicas</span>
+                            <p class="text-xs sm:text-sm text-slate-200 mt-2 leading-relaxed">
+                                Máxima alineación y potencial; trabajo personalizado por cuenta.
+                            </p>
+                        </div>
+
+                        <div class="bg-brand-card border-l-4 border-sky-500 rounded-r-xl p-5">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-sky-400">Tier 2 – Alto potencial</span>
+                            <p class="text-xs sm:text-sm text-slate-200 mt-2 leading-relaxed">
+                                Buena alineación, con alguna variable por validar; trabajo por grupos de cuentas similares.
+                            </p>
+                        </div>
+
+                        <div class="bg-brand-card border-l-4 border-slate-500 rounded-r-xl p-5">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-300">Tier 3 – Desarrollo</span>
+                            <p class="text-xs sm:text-sm text-slate-200 mt-2 leading-relaxed">
+                                Empresas alineadas, pero con menor evidencia o información incompleta; trabajo escalable y validación progresiva.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.6 CÓMO DEBERÍA TRABAJARSE CADA CUENTA (PLANTILLA FICHA DE INTELIGENCIA COMERCIAL) -->
+            <div class="mb-14">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span class="text-brand-teal">4.6.</span> Cómo debería trabajarse cada cuenta
+                </h3>
+
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-6 border-b border-brand-border">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-brand-teal flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                Plantilla Operativa ABM
+                            </span>
+                            <h4 class="text-lg font-bold text-white mt-0.5">Ficha de Inteligencia Comercial por Cuenta</h4>
+                        </div>
+                        <span class="text-xs px-3 py-1 rounded bg-brand-surface border border-brand-border text-slate-300">Estructura Estándar Obligatoria</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Empresa</span>
+                            <p class="text-xs text-slate-200">Nombre y sitio web</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">País</span>
+                            <p class="text-xs text-slate-200">Mercado donde opera</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Industria</span>
+                            <p class="text-xs text-slate-200">Clasificación dentro del ICP</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Tamaño</span>
+                            <p class="text-xs text-slate-200">Empleados y facturación</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5 sm:col-span-2">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Potencial</span>
+                            <p class="text-xs text-slate-200">Soluciones de XUMTECH que podrían resolver necesidades</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Decisor económico</span>
+                            <p class="text-xs text-slate-200">CEO, Gerente General, socio o responsable presupuestario</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Decisor funcional</span>
+                            <p class="text-xs text-slate-200">CIO, CDO, CMO, CCO, COO, etc.</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Influenciadores</span>
+                            <p class="text-xs text-slate-200">Líderes de tecnología, proyectos, canales, CX y operaciones</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Señales de oportunidad</span>
+                            <p class="text-xs text-slate-200">Expansión, modernización, automatización y transformación</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Estrategia</span>
+                            <p class="text-xs text-slate-200">Mensaje, propuesta de valor y secuencia de acercamiento</p>
+                        </div>
+                        <div class="bg-brand-surface border border-brand-border rounded-lg p-3.5">
+                            <span class="text-[11px] font-bold uppercase text-brand-tealLight block mb-1">Estado</span>
+                            <p class="text-xs text-slate-200">Cuenta por investigar, contactada, reunión, oportunidad o descartada</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-obsidian border border-brand-teal/30 rounded-lg p-4 text-xs sm:text-sm text-white font-medium">
+                        La clave es que cada cuenta tenga una razón concreta para ser trabajada. No basta con que la empresa pertenezca a una industria objetivo.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.7 DISTRIBUCIÓN INICIAL DEL ESFUERZO COMERCIAL (60% / 25% / 15%) -->
+            <div>
+                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                    <span class="text-brand-teal">4.7.</span> Distribución inicial del esfuerzo comercial
+                </h3>
+                <p class="text-xs sm:text-sm text-brand-muted mb-6">
+                    Hipótesis de trabajo inicial (no representa un resultado histórico ni una asignación definitiva de recursos).
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8">
+                    <!-- Gráfico Donut -->
+                    <div class="lg:col-span-5 flex flex-col items-center">
+                        <div class="w-full max-w-xs h-64">
+                            <canvas id="chartEsfuerzoABM"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Tarjetas de Frentes -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-brand-surface border-l-4 border-brand-teal rounded-r-xl p-4">
+                            <div class="flex items-center gap-2.5 mb-1">
+                                <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-brand-teal text-brand-obsidian">60%</span>
+                                <h4 class="font-bold text-white text-sm sm:text-base">Cartera ABM prioritaria</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                                Cuentas nuevas de Manufactura y Retail en Costa Rica, Guatemala y Honduras, con perfiles de Tecnología, Transformación, Comercial y Marketing.
+                            </p>
+                        </div>
+
+                        <div class="bg-brand-surface border-l-4 border-sky-500 rounded-r-xl p-4">
+                            <div class="flex items-center gap-2.5 mb-1">
+                                <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-sky-500/20 text-sky-300 border border-sky-500/30">25%</span>
+                                <h4 class="font-bold text-white text-sm sm:text-base">Optimización de segmentos</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                                Financiero, Panamá, Ecuador, Seguros y Logística. El objetivo es mejorar la selección de cuentas y decisores.
+                            </p>
+                        </div>
+
+                        <div class="bg-brand-surface border-l-4 border-brand-coral rounded-r-xl p-4">
+                            <div class="flex items-center gap-2.5 mb-1">
+                                <span class="px-2.5 py-0.5 rounded text-xs font-extrabold bg-brand-coral/20 text-brand-coral border border-brand-coral/30">15%</span>
+                                <h4 class="font-bold text-white text-sm sm:text-base">Desarrollo de mercados</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                                México, Colombia y otros segmentos con poca cobertura o evidencia.
+                            </p>
+                        </div>
+
+                        <p class="text-xs text-brand-muted pt-2">
+                            * La distribución deberá revisarse después de medir la respuesta por cuenta.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 5: METODOLOGÍA DE IMPLEMENTACIÓN ABM                          -->
+        <!-- ===================================================================== -->
+        <section id="metodologia" class="py-14 border-b border-brand-border">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 05 · Hoja de Ruta Operativa</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Metodología de Implementación ABM</h2>
+                <p class="text-sm text-brand-muted mt-2">Flujo secuencial de 10 pasos para transicionar de contactos aislados a cuentas estratégicas.</p>
+            </div>
+
+            <!-- Flujo de 10 pasos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">1</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Definir los segmentos prioritarios.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">2</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Identificar nuevas empresas con características similares a las que generaron resultados.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">3</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Investigar y puntuar cada cuenta.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">4</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Clasificar las cuentas en Tier 1, Tier 2 y Tier 3.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">5</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Mapear decisores e influenciadores.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">6</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Construir una hipótesis comercial por empresa.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">7</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Diseñar mensajes y secuencias de acercamiento.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">8</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Ejecutar y registrar interacciones.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">9</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Medir resultados por cuenta y segmento.</p>
+                </div>
+                <div class="bg-brand-card border border-brand-border rounded-xl p-4 relative">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-brand-teal text-brand-obsidian font-extrabold text-xs mb-3">10</span>
+                    <p class="text-xs sm:text-sm font-medium text-slate-100">Ajustar prioridades según la respuesta comercial.</p>
+                </div>
+            </div>
+
+            <!-- Nota de aclaración metodológica -->
+            <div class="bg-brand-surface border-l-4 border-brand-teal rounded-r-xl p-5 text-xs sm:text-sm text-slate-200">
+                <strong class="text-white font-bold">Importante:</strong> Las empresas que ya generaron reuniones sirven como referencias históricas para reconocer patrones. No deben presentarse como cartera de nuevas cuentas a prospectar. El objetivo es encontrar empresas nuevas con características comparables y potencial similar.
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- SECCIÓN 6: CONCLUSIÓN EJECUTIVA FINAL                                 -->
+        <!-- ===================================================================== -->
+        <section id="conclusion" class="pt-14">
+            <div class="bg-brand-card border border-brand-teal/40 rounded-2xl p-8 sm:p-10">
                 <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 06 · Cierre Estratégico</span>
                 <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2 mb-6">Conclusión Ejecutiva Final</h2>
 
