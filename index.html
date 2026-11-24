@@ -1,1 +1,467 @@
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-teal">Sección 06 · Cierre Estratégico</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2 mb-6">Conclusión Ejecutiva Final</h2>
 
+                <div class="space-y-4 text-sm sm:text-base text-slate-200 leading-relaxed mb-8">
+                    <p>
+                        La base de XUMTECH tiene una buena correspondencia con el ICP y las 38 reuniones obtenidas demuestran que existe tracción comercial en mercados, industrias y áreas funcionales concretas.
+                    </p>
+                    <p>
+                        Los principales resultados se concentran en Costa Rica, Guatemala y Honduras; en Manufactura y Retail; y en Tecnología, Comercial/Ventas, Marketing y Transformación Digital.
+                    </p>
+                    <p>
+                        La oportunidad de crecimiento está en aprovechar estos patrones para identificar nuevas cuentas con características similares, mejorar la profundidad de investigación de cada empresa y construir estrategias de relacionamiento con múltiples decisores.
+                    </p>
+                </div>
+
+                <!-- Mensaje Rector Destacado -->
+                <div class="bg-brand-obsidian border border-brand-teal rounded-xl p-6">
+                    <p class="text-base sm:text-lg font-bold text-white leading-snug">
+                        "La evolución recomendada es pasar de generar contactos a desarrollar cuentas: menos prospección generalista y más inteligencia comercial, priorización y penetración estratégica de empresas."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER CORPORATIVO -->
+    <footer class="border-t border-brand-border bg-brand-surface py-8 text-xs text-brand-muted">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="font-bold text-white">XUMTECH</span> · Diagnóstico Comercial y Estrategia ABM
+            </div>
+            <div class="flex items-center gap-4 no-print">
+                <a href="#resumen" class="hover:text-brand-tealLight transition-colors">Volver arriba ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS DE VISUALIZACIÓN DE DATOS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Registrar plugin de etiquetas numéricas
+            Chart.register(ChartDataLabels);
+
+            // Configuración global sobria para fondos oscuros
+            Chart.defaults.color = '#94A3B8';
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.font.size = 11;
+
+            const tealPrimary = '#139A91';
+            const tealHighlight = '#1CC4B9';
+            const slateMuted = '#475569';
+            const skyAccent = '#0284C7';
+            const coralAccent = '#E63222';
+
+            // 1. Gráfico: Reuniones por País (38)
+            new Chart(document.getElementById('chartReunionesPais'), {
+                type: 'bar',
+                data: {
+                    labels: ['Costa Rica', 'Guatemala', 'Honduras', 'El Salvador', 'Ecuador', 'Nicaragua', 'EE.UU.', 'Rep. Dom.', 'Panamá'],
+                    datasets: [{
+                        label: 'Reuniones',
+                        data: [10, 8, 7, 4, 4, 2, 1, 1, 1],
+                        backgroundColor: [tealHighlight, tealHighlight, tealHighlight, tealPrimary, tealPrimary, slateMuted, slateMuted, slateMuted, slateMuted],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#F1F5F9',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { weight: 'bold', size: 11 }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1E293B' }, suggestedMax: 12 },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Gráfico: Reuniones por Industria (38)
+            new Chart(document.getElementById('chartReunionesIndustria'), {
+                type: 'bar',
+                data: {
+                    labels: ['Manufactura', 'Retail', 'Servicios', 'Financiero', 'Automotriz', 'Tecnología', 'Seguros', 'Salud animal', 'Partner', 'Logística', 'Agricultura'],
+                    datasets: [{
+                        label: 'Reuniones',
+                        data: [14, 7, 5, 4, 2, 1, 1, 1, 1, 1, 1],
+                        backgroundColor: [tealHighlight, tealHighlight, tealPrimary, tealPrimary, slateMuted, slateMuted, slateMuted, slateMuted, slateMuted, slateMuted, slateMuted],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#F1F5F9',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { weight: 'bold', size: 11 }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1E293B' }, suggestedMax: 16 },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Gráfico: Reuniones por Área Funcional (38)
+            new Chart(document.getElementById('chartReunionesArea'), {
+                type: 'bar',
+                data: {
+                    labels: ['Tecnología', 'Marketing y Mercadeo', 'Comercial y Ventas', 'Transformación y Digital', 'Presidencia / GG', 'CX y Servicio', 'Innovación'],
+                    datasets: [{
+                        label: 'Reuniones',
+                        data: [11, 7, 7, 6, 4, 2, 1],
+                        backgroundColor: [tealHighlight, tealHighlight, tealHighlight, tealHighlight, tealPrimary, slateMuted, slateMuted],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#F1F5F9',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { weight: 'bold', size: 11 }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1E293B' }, suggestedMax: 13 },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 4. Gráfico: BBDD por Industria
+            new Chart(document.getElementById('chartBBDDIndustria'), {
+                type: 'bar',
+                data: {
+                    labels: ['Financiero', 'Manufactura', 'Retail', 'Partner', 'Seguros', 'Automotriz', 'Consumo masivo', 'Logística', 'Educación'],
+                    datasets: [{
+                        label: 'Contactos',
+                        data: [1252, 1035, 648, 446, 289, 261, 239, 170, 50],
+                        backgroundColor: tealPrimary,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#E2E8F0',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { size: 10, weight: '600' }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1E293B' }, suggestedMax: 1450 },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 5. Gráfico: BBDD por Área
+            new Chart(document.getElementById('chartBBDDArea'), {
+                type: 'bar',
+                data: {
+                    labels: ['Tecnología', 'Comercial/Ventas', 'Marketing', 'Presidencia/GG', 'Transformación', 'CX y Servicio', 'Consultoría', 'Operaciones', 'Innovación'],
+                    datasets: [{
+                        label: 'Contactos',
+                        data: [1039, 1026, 733, 526, 170, 148, 142, 111, 60],
+                        backgroundColor: tealPrimary,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#E2E8F0',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { size: 10, weight: '600' }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1E293B' }, suggestedMax: 1200 },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 6. Comparación Doble Eje: Contactos vs Reuniones por Industria
+            new Chart(document.getElementById('chartCompIndustria'), {
+                type: 'bar',
+                data: {
+                    labels: ['Manufactura', 'Financiero', 'Retail', 'Automotriz', 'Seguros', 'Logística', 'Educación'],
+                    datasets: [
+                        {
+                            label: 'Contactos BBDD',
+                            data: [1035, 1252, 648, 261, 289, 170, 50],
+                            backgroundColor: '#334155',
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Reuniones Generadas',
+                            data: [14, 4, 7, 2, 1, 1, 0],
+                            backgroundColor: tealHighlight,
+                            borderRadius: 4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#CBD5E1' } },
+                        datalabels: {
+                            color: '#FFFFFF',
+                            anchor: 'end',
+                            align: 'top',
+                            font: { size: 10, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            grid: { color: '#1E293B' },
+                            suggestedMax: 1450,
+                            title: { display: true, text: 'Contactos', color: '#94A3B8', font: { size: 10 } }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            grid: { display: false },
+                            suggestedMax: 16,
+                            title: { display: true, text: 'Reuniones', color: tealHighlight, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // 7. Comparación Doble Eje: Contactos vs Reuniones por Área
+            new Chart(document.getElementById('chartCompArea'), {
+                type: 'bar',
+                data: {
+                    labels: ['Tecnología', 'Comercial/Ventas', 'Marketing', 'Transformación', 'CX y Servicio', 'Operaciones', 'Innovación'],
+                    datasets: [
+                        {
+                            label: 'Contactos BBDD',
+                            data: [1039, 1026, 733, 170, 148, 111, 60],
+                            backgroundColor: '#334155',
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Reuniones Generadas',
+                            data: [11, 7, 7, 6, 2, 0, 1],
+                            backgroundColor: tealHighlight,
+                            borderRadius: 4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#CBD5E1' } },
+                        datalabels: {
+                            color: '#FFFFFF',
+                            anchor: 'end',
+                            align: 'top',
+                            font: { size: 10, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            grid: { color: '#1E293B' },
+                            suggestedMax: 1200,
+                            title: { display: true, text: 'Contactos', color: '#94A3B8', font: { size: 10 } }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            grid: { display: false },
+                            suggestedMax: 13,
+                            title: { display: true, text: 'Reuniones', color: tealHighlight, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // 8. Gráfico Donut: Distribución Inicial del Esfuerzo ABM (60% / 25% / 15%)
+            new Chart(document.getElementById('chartEsfuerzoABM'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cartera ABM prioritaria', 'Optimización de segmentos', 'Desarrollo de mercados'],
+                    datasets: [{
+                        data: [60, 25, 15],
+                        backgroundColor: [tealPrimary, skyAccent, coralAccent],
+                        borderColor: '#18202B',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#CBD5E1', padding: 14, font: { size: 11 } }
+                        },
+                        datalabels: {
+                            color: '#FFFFFF',
+                            font: { weight: 'extrabold', size: 13 },
+                            formatter: (value) => value + '%'
+                        }
+                    }
+                }
+            });
+
+            // Resaltado activo en navegación al hacer scroll
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 110;
+                    if (pageYOffset >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-brand-teal/20', 'text-brand-tealLight');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('bg-brand-teal/20', 'text-brand-tealLight');
+                    }
+                });
+            });
+
+            // Interactividad del Mapa de Priorización Regional
+            const countryData = {
+                costarica: {
+                    title: 'Costa Rica · Prioridad 1',
+                    metrics: '1.354 contactos · 10 reuniones',
+                    desc: 'Mercado líder en tracción histórica. Construir la primera cartera ABM de nuevas cuentas priorizando Manufactura, Retail y transformación digital.'
+                },
+                guatemala: {
+                    title: 'Guatemala · Prioridad 1',
+                    metrics: '885 contactos · 8 reuniones',
+                    desc: 'Segundo mercado con mayor evidencia comercial. Foco clave para construir la primera cartera ABM de nuevas cuentas en Manufactura y Retail.'
+                },
+                honduras: {
+                    title: 'Honduras · Prioridad 1',
+                    metrics: '821 contactos · 7 reuniones',
+                    desc: 'Completa el bloque de los 3 mercados principales que concentran 25 reuniones (65,8% del total).'
+                },
+                ecuador: {
+                    title: 'Ecuador · Prioridad 2',
+                    metrics: '797 contactos · 4 reuniones',
+                    desc: 'Requiere optimizar la selección de cuentas y los perfiles abordados para incrementar su efectividad.'
+                },
+                elsalvador: {
+                    title: 'El Salvador · Prioridad 2',
+                    metrics: '571 contactos · 4 reuniones',
+                    desc: 'Presenta una señal interesante en el sector Financiero; requiere optimización focalizada de cuentas y decisores.'
+                },
+                panama: {
+                    title: 'Panamá · Prioridad 3',
+                    metrics: '575 contactos · 1 reunión',
+                    desc: 'Antes de ampliar la base, conviene revisar las cuentas existentes, los cargos y la estrategia de acercamiento.'
+                },
+                nicaragua: {
+                    title: 'Nicaragua · Mercado Complementario',
+                    metrics: '366 contactos · 2 reuniones',
+                    desc: 'Mantener como mercado complementario dentro de la operación regional.'
+                },
+                mexico: {
+                    title: 'México · Desarrollo de mercado',
+                    metrics: '1 contacto · 0 reuniones',
+                    desc: 'No existe suficiente cobertura para evaluar su desempeño. Se recomienda desarrollar una primera cartera de cuentas objetivo, evitando cargar contactos indiscriminadamente.'
+                },
+                colombia: {
+                    title: 'Colombia · Desarrollo de mercado',
+                    metrics: '9 contactos · 0 reuniones',
+                    desc: 'No existe suficiente cobertura para evaluar su desempeño. Se recomienda desarrollar una primera cartera de cuentas objetivo, evitando cargar contactos indiscriminadamente.'
+                }
+            };
+
+            const mapCountries = document.querySelectorAll('.map-country');
+            const detailTitle = document.getElementById('map-detail-title');
+            const detailMetrics = document.getElementById('map-detail-metrics');
+            const detailDesc = document.getElementById('map-detail-desc');
+            const filterBtns = document.querySelectorAll('.map-filter-btn');
+
+            function updateCountryDetail(key) {
+                const info = countryData[key];
+                if (!info) return;
+                detailTitle.textContent = info.title;
+                detailMetrics.textContent = info.metrics;
+                detailDesc.textContent = info.desc;
+            }
+
+            mapCountries.forEach(group => {
+                const key = group.getAttribute('data-country');
+                group.addEventListener('mouseenter', () => updateCountryDetail(key));
+                group.addEventListener('click', () => updateCountryDetail(key));
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.getAttribute('data-filter');
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-brand-teal', 'text-brand-obsidian');
+                        b.classList.add('bg-brand-surface', 'text-slate-300');
+                    });
+                    btn.classList.remove('bg-brand-surface', 'text-slate-300');
+                    btn.classList.add('bg-brand-teal', 'text-brand-obsidian');
+
+                    mapCountries.forEach(group => {
+                        const tier = group.getAttribute('data-tier');
+                        if (filter === 'all' || tier === filter) {
+                            group.style.opacity = '1';
+                        } else {
+                            group.style.opacity = '0.22';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
